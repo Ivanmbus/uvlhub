@@ -30,10 +30,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up Python
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: ${{ matrix.python-version }}
 
     - name: Install dependencies
       run: |
@@ -43,11 +43,11 @@ jobs:
     - name: Check outdated dependencies
       run: |
         pip list --outdated
-        
+
     - name: Security audit with pip-audit
       run: |
         pip install pip-audit
-        pip-audit 
+        pip-audit
 
     - name: Upload coverage to Codacy
       run: |
