@@ -5,6 +5,8 @@ on:
     # Trigger this workflow only after "Pytest" completes
     workflows: 
       - "Pytest"
+      - "Codacy CI"
+      - "Python Lint"
     types:
       - completed
 
