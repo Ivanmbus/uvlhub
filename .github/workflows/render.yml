@@ -1,18 +1,21 @@
 name: Deploy to Render
 
 on:
-    workflow_run:
-    # Trigger this workflow only after "Pytest" completes
-    workflows: ["Pytest", "Codacy CI", "Python Lint"]
+  workflow_run:
+    # Trigger this workflow only after specified workflows complete
+    workflows:
+      - Pytest
+      - Codacy CI
+      - Python Lint
     types:
       - completed
 
 jobs:
   deploy:
     name: Deploy to Render
-    needs: testing
     if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
