@@ -3,10 +3,7 @@ name: Deploy to Render
 on:
     workflow_run:
     # Trigger this workflow only after "Pytest" completes
-    workflows: 
-      - "Pytest"
-      - "Codacy CI"
-      - "Python Lint"
+    workflows: ["Pytest", "Codacy CI", "Python Lint"]
     types:
       - completed
 
