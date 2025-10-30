@@ -1,9 +1,12 @@
 name: Deploy to Render
 
 on:
-    push:   
-      branches:
-        - main
+    workflow_run:
+    # Trigger this workflow only after "Pytest" completes
+    workflows: 
+      - "Pytest"
+    types:
+      - completed
 
 jobs:
 
@@ -51,7 +54,9 @@ jobs:
   deploy:
     name: Deploy to Render
     needs: testing
-    if: success()
+    if:  >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
