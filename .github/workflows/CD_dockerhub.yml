@@ -12,7 +12,7 @@ on:
       - Pytest
       - Codacy CI
       - Python Lint
-    types:
+     types:
       - completed
 
 jobs:
