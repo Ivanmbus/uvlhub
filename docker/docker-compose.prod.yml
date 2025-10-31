@@ -2,9 +2,9 @@ services:
 
   web:
     container_name: web_app_container
-    image: <your_dockerhub_name>/uvlhub:latest
+    image: ivamirbal/uvlhub:latest
     env_file:
-      - ../.env
+      - ../.env.production.example
     ports:
       - "5000:5000"
     depends_on:

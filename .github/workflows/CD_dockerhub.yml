@@ -7,13 +7,19 @@
 name: Publish image in Docker Hub
 
 on:
-  release:
-    # Trigger only when a release is published
-    types: [published]
+  workflow_run:
+     workflows:
+      - Pytest
+      - Codacy CI
+      - Python Lint
+    types:
+      - completed
 
 jobs:
   push_to_registry:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}  # solo si los tests pasaron
     runs-on: ubuntu-24.04
+
 
     steps:
       
@@ -27,13 +33,13 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 3: Build and push the Docker image
+      # Step 3: Build and push the Docker image (github.sha as tag in order to an image for each commit in main/trunk)
       - name: Build and push Docker image
         run: |
-          TAG=${{ github.event.release.tag_name }}
+          TAG=${{ github.sha}}
           IMAGE=${{ secrets.DOCKER_USER }}/uvlhub
 
-          docker build --build-arg VERSION_TAG=$TAG -t $IMAGE:$TAG -f docker/images/Dockerfile.prod .
+          docker build --build-arg VERSION_TAG=$TAG -t $IMAGE:$TAG -f docker/images/Dockerfile.render .
           docker push $IMAGE:$TAG
 
           docker tag $IMAGE:$TAG $IMAGE:latest
